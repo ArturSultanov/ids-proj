@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2024-02-12T14:38:27.552Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36" etag="jYjCq89LNLX-77yetTXr" version="23.1.2" type="github">
+<mxfile host="app.diagrams.net" modified="2024-02-12T14:39:34.874Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36" etag="KR-qTHjt6awpEzJGY3Nx" version="23.1.2" type="github">
   <diagram name="Page-1" id="j9qC79bx8wqFnW0S5RmF">
     <mxGraphModel dx="867" dy="582" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
@@ -7,8 +7,8 @@
         <mxCell id="0cacYjYukHsMXe69OJWF-1" value="Сourier" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" parent="1" vertex="1">
           <mxGeometry x="40" y="80" width="30" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="0cacYjYukHsMXe69OJWF-2" value="Use Case Diagram" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
-          <mxGeometry x="365" width="120" height="30" as="geometry" />
+        <mxCell id="0cacYjYukHsMXe69OJWF-2" value="Use Case Diagram" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;fillColor=none;strokeColor=default;" parent="1" vertex="1">
+          <mxGeometry x="365" y="10" width="120" height="30" as="geometry" />
         </mxCell>
         <mxCell id="8N6oZQhw8tRqxdIhCWBr-1" value="Manager" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" vertex="1" parent="1">
           <mxGeometry x="40" y="180" width="30" height="60" as="geometry" />
