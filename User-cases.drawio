@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2024-02-14T07:20:26.695Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36" etag="aQEwDd6nu73m0mEmWrTB" version="23.1.2" type="github">
+<mxfile host="app.diagrams.net" modified="2024-02-14T07:41:58.099Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36" etag="4Ffl1zYG19YZ5SvsD8QC" version="23.1.2" type="github">
   <diagram name="Page-1" id="j9qC79bx8wqFnW0S5RmF">
     <mxGraphModel dx="763" dy="512" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
@@ -67,11 +67,11 @@
         <mxCell id="8N6oZQhw8tRqxdIhCWBr-13" value="Worker&lt;br&gt;" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;strokeColor=default;" parent="1" vertex="1">
           <mxGeometry x="40" y="40" width="30" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="I9kpLu-LO9SQn9hKeoNu-10" value="Create account" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="110" y="40" width="140" height="70" as="geometry" />
+        <mxCell id="I9kpLu-LO9SQn9hKeoNu-10" value="Edit account detail" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="110" width="140" height="70" as="geometry" />
         </mxCell>
         <mxCell id="I9kpLu-LO9SQn9hKeoNu-11" value="Cancel order" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="90" y="400" width="140" height="70" as="geometry" />
+          <mxGeometry x="110" y="400" width="140" height="70" as="geometry" />
         </mxCell>
         <mxCell id="I9kpLu-LO9SQn9hKeoNu-12" value="Pay order" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
           <mxGeometry x="580" y="840" width="140" height="70" as="geometry" />
@@ -82,20 +82,26 @@
             <mxPoint x="600" y="840" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="I9kpLu-LO9SQn9hKeoNu-14" value="Use Case" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="20" y="670" width="140" height="70" as="geometry" />
+        <mxCell id="I9kpLu-LO9SQn9hKeoNu-14" value="Check clients orders" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="110" y="80" width="140" height="70" as="geometry" />
         </mxCell>
         <mxCell id="I9kpLu-LO9SQn9hKeoNu-15" value="Return money" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="300" y="400" width="140" height="70" as="geometry" />
+          <mxGeometry x="320" y="400" width="140" height="70" as="geometry" />
         </mxCell>
         <mxCell id="I9kpLu-LO9SQn9hKeoNu-16" value="&amp;lt;&amp;lt;include&amp;gt;&amp;gt;" style="edgeStyle=none;html=1;endArrow=open;verticalAlign=bottom;dashed=1;labelBackgroundColor=none;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="I9kpLu-LO9SQn9hKeoNu-11" target="I9kpLu-LO9SQn9hKeoNu-15">
           <mxGeometry width="160" relative="1" as="geometry">
-            <mxPoint x="270" y="550" as="sourcePoint" />
-            <mxPoint x="430" y="550" as="targetPoint" />
+            <mxPoint x="290" y="550" as="sourcePoint" />
+            <mxPoint x="450" y="550" as="targetPoint" />
           </mxGeometry>
         </mxCell>
         <mxCell id="I9kpLu-LO9SQn9hKeoNu-17" value="Cancel order" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
           <mxGeometry x="140" y="880" width="140" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="I9kpLu-LO9SQn9hKeoNu-20" value="Deliver order" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="110" y="200" width="140" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="I9kpLu-LO9SQn9hKeoNu-22" value="Close order" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="110" y="320" width="140" height="70" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
