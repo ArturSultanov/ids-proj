@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2024-02-14T08:39:50.687Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36" etag="aPdE74CuodIk80_4KbPn" version="23.1.2" type="github">
+<mxfile host="app.diagrams.net" modified="2024-02-14T08:45:21.867Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36" etag="BzrNL4ZKTfWBiHz9kzol" version="23.1.2" type="github">
   <diagram name="Page-1" id="j9qC79bx8wqFnW0S5RmF">
     <mxGraphModel dx="763" dy="512" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
@@ -6,11 +6,11 @@
         <mxCell id="1" parent="0" />
         <mxCell id="I9kpLu-LO9SQn9hKeoNu-8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;" edge="1" parent="1" source="0cacYjYukHsMXe69OJWF-1">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="10" y="230" as="targetPoint" />
+            <mxPoint x="10" y="290" as="targetPoint" />
           </mxGeometry>
         </mxCell>
         <mxCell id="0cacYjYukHsMXe69OJWF-1" value="Сourier" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" parent="1" vertex="1">
-          <mxGeometry x="40" y="200" width="30" height="60" as="geometry" />
+          <mxGeometry x="40" y="260" width="30" height="60" as="geometry" />
         </mxCell>
         <mxCell id="0cacYjYukHsMXe69OJWF-2" value="Use Case Diagram" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;fillColor=none;strokeColor=default;" parent="1" vertex="1">
           <mxGeometry x="365" y="10" width="120" height="30" as="geometry" />
@@ -27,9 +27,7 @@
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="20" y="80" as="targetPoint" />
             <Array as="points">
-              <mxPoint x="10" y="750" />
-              <mxPoint x="10" y="710" />
-              <mxPoint x="11" y="710" />
+              <mxPoint x="11" y="800" />
               <mxPoint x="11" y="610" />
               <mxPoint x="10" y="610" />
               <mxPoint x="10" y="390" />
@@ -39,7 +37,7 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="8N6oZQhw8tRqxdIhCWBr-3" value="Baker" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" parent="1" vertex="1">
-          <mxGeometry x="40" y="720" width="30" height="60" as="geometry" />
+          <mxGeometry x="40" y="770" width="30" height="60" as="geometry" />
         </mxCell>
         <mxCell id="8N6oZQhw8tRqxdIhCWBr-5" value="Client" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" parent="1" vertex="1">
           <mxGeometry x="40" y="1000" width="30" height="60" as="geometry" />
@@ -84,7 +82,7 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="I9kpLu-LO9SQn9hKeoNu-14" value="Check clients orders" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="110" y="80" width="140" height="70" as="geometry" />
+          <mxGeometry x="110" y="70" width="140" height="70" as="geometry" />
         </mxCell>
         <mxCell id="I9kpLu-LO9SQn9hKeoNu-15" value="Return money" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
           <mxGeometry x="500" y="540" width="140" height="70" as="geometry" />
@@ -99,7 +97,7 @@
           <mxGeometry x="140" y="1045" width="140" height="70" as="geometry" />
         </mxCell>
         <mxCell id="I9kpLu-LO9SQn9hKeoNu-20" value="Deliver order" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="110" y="170" width="140" height="70" as="geometry" />
+          <mxGeometry x="110" y="230" width="140" height="70" as="geometry" />
         </mxCell>
         <mxCell id="I9kpLu-LO9SQn9hKeoNu-22" value="Close order" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
           <mxGeometry x="300" y="480" width="140" height="70" as="geometry" />
@@ -123,13 +121,13 @@
           <mxGeometry x="140" y="975" width="140" height="70" as="geometry" />
         </mxCell>
         <mxCell id="I9kpLu-LO9SQn9hKeoNu-28" value="Сonfirm the delivery" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="110" y="250" width="140" height="70" as="geometry" />
+          <mxGeometry x="110" y="300" width="140" height="70" as="geometry" />
         </mxCell>
         <mxCell id="I9kpLu-LO9SQn9hKeoNu-30" value="Set courier to order" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="100" y="590" width="140" height="70" as="geometry" />
+          <mxGeometry x="100" y="580" width="140" height="70" as="geometry" />
         </mxCell>
-        <mxCell id="I9kpLu-LO9SQn9hKeoNu-31" value="Print orders&amp;nbsp;schedule&amp;nbsp;" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="110" y="330" width="140" height="70" as="geometry" />
+        <mxCell id="I9kpLu-LO9SQn9hKeoNu-31" value="Show delivery schedule&amp;nbsp;" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="110" y="370" width="140" height="70" as="geometry" />
         </mxCell>
         <mxCell id="I9kpLu-LO9SQn9hKeoNu-33" value="Check&amp;nbsp;assortment" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
           <mxGeometry x="140" y="1115" width="140" height="70" as="geometry" />
@@ -142,6 +140,12 @@
             <mxPoint x="270" y="1050" as="sourcePoint" />
             <mxPoint x="430" y="1050" as="targetPoint" />
           </mxGeometry>
+        </mxCell>
+        <mxCell id="I9kpLu-LO9SQn9hKeoNu-36" value="Edit&lt;br&gt;&amp;nbsp;assortment" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="100" y="650" width="140" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="I9kpLu-LO9SQn9hKeoNu-37" value="Show orders&amp;nbsp;" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="110" y="140" width="140" height="70" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
