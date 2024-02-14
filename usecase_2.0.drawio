@@ -1,9 +1,69 @@
-<mxfile host="app.diagrams.net" modified="2024-02-14T19:17:28.606Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36" version="23.1.2" etag="WzBsFe2jZ22Oaci3u-uJ" type="github">
+<mxfile host="app.diagrams.net" modified="2024-02-14T19:30:56.094Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36" etag="9jQrTU-YiPA3jGRdPjIv" version="23.1.2" type="github">
   <diagram name="Page-1" id="9Vqm5GZMZz8noW9PzrCs">
-    <mxGraphModel>
+    <mxGraphModel dx="867" dy="582" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
+        <mxCell id="rpv8kUOx42k_lFc9GDVw-1" value="Employee" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;strokeColor=default;" vertex="1" parent="1">
+          <mxGeometry x="40" y="135" width="30" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="rpv8kUOx42k_lFc9GDVw-2" value="View working shifts" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="120" y="50" width="140" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="rpv8kUOx42k_lFc9GDVw-3" value="View Employee&#39;s shifts" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="120" y="130" width="140" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="rpv8kUOx42k_lFc9GDVw-4" value="Show orders&amp;nbsp;" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="360" y="50" width="140" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="rpv8kUOx42k_lFc9GDVw-5" value="&amp;lt;&amp;lt;extend&amp;gt;&amp;gt;" style="edgeStyle=none;html=1;startArrow=open;endArrow=none;startSize=12;verticalAlign=bottom;dashed=1;labelBackgroundColor=none;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="rpv8kUOx42k_lFc9GDVw-2" target="rpv8kUOx42k_lFc9GDVw-4">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="210" y="140" as="sourcePoint" />
+            <mxPoint x="370" y="140" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rpv8kUOx42k_lFc9GDVw-6" value="View Employee&#39;s presonal info" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="120" y="210" width="140" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="rpv8kUOx42k_lFc9GDVw-8" value="Manager" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;strokeColor=default;" vertex="1" parent="1">
+          <mxGeometry x="40" y="415" width="30" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="rpv8kUOx42k_lFc9GDVw-9" value="View employee roster" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="120" y="410" width="140" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="rpv8kUOx42k_lFc9GDVw-10" value="View Employee&#39;s shifts" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="120" y="640" width="140" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="rpv8kUOx42k_lFc9GDVw-11" value="Add employee" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="360" y="330" width="140" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="rpv8kUOx42k_lFc9GDVw-12" value="&amp;lt;&amp;lt;extend&amp;gt;&amp;gt;" style="edgeStyle=none;html=1;startArrow=open;endArrow=none;startSize=12;verticalAlign=bottom;dashed=1;labelBackgroundColor=none;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=1;exitY=0;exitDx=0;exitDy=0;" edge="1" parent="1" source="rpv8kUOx42k_lFc9GDVw-9" target="rpv8kUOx42k_lFc9GDVw-11">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="250" y="390" as="sourcePoint" />
+            <mxPoint x="370" y="420" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rpv8kUOx42k_lFc9GDVw-13" value="View Employee&#39;s presonal info" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="120" y="720" width="140" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="rpv8kUOx42k_lFc9GDVw-14" value="Remove employee" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="360" y="410" width="140" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="rpv8kUOx42k_lFc9GDVw-15" value="Edit employee info" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="360" y="490" width="140" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="rpv8kUOx42k_lFc9GDVw-18" value="&amp;lt;&amp;lt;extend&amp;gt;&amp;gt;" style="edgeStyle=none;html=1;startArrow=open;endArrow=none;startSize=12;verticalAlign=bottom;dashed=1;labelBackgroundColor=none;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="rpv8kUOx42k_lFc9GDVw-9" target="rpv8kUOx42k_lFc9GDVw-14">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="170" y="510" as="sourcePoint" />
+            <mxPoint x="330" y="510" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rpv8kUOx42k_lFc9GDVw-20" value="&amp;lt;&amp;lt;extend&amp;gt;&amp;gt;" style="edgeStyle=none;html=1;startArrow=open;endArrow=none;startSize=12;verticalAlign=bottom;dashed=1;labelBackgroundColor=none;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=1;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="rpv8kUOx42k_lFc9GDVw-9" target="rpv8kUOx42k_lFc9GDVw-15">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="170" y="520" as="sourcePoint" />
+            <mxPoint x="330" y="520" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
       </root>
     </mxGraphModel>
   </diagram>
