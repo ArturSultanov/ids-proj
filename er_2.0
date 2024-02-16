@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" modified="2024-02-16T13:21:39.125Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36" etag="q9EMQQs1IL_zXE-XDvpF" version="23.1.2" type="github">
+<mxfile host="app.diagrams.net" modified="2024-02-16T13:22:07.737Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36" etag="mEaCYuVgl-K8aAKMHLfh" version="23.1.2" type="github">
   <diagram id="R2lEEEUBdFMjLlhIrx00" name="Page-1">
-    <mxGraphModel dx="2758" dy="1280" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0" extFonts="Permanent Marker^https://fonts.googleapis.com/css?family=Permanent+Marker">
+    <mxGraphModel dx="1645" dy="533" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0" extFonts="Permanent Marker^https://fonts.googleapis.com/css?family=Permanent+Marker">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -455,7 +455,7 @@
           <mxGeometry x="410" y="980" width="100" height="40" as="geometry" />
         </mxCell>
         <mxCell id="5X8hTqZDHeVMlVDzLUr4-194" value="&amp;lt;&amp;lt; weak &amp;gt;&amp;gt;&lt;br&gt;Delivery ticket" style="shape=table;startSize=30;container=1;collapsible=1;childLayout=tableLayout;fixedRows=1;rowLines=0;fontStyle=1;align=center;resizeLast=1;html=1;" vertex="1" parent="1">
-          <mxGeometry x="-425" y="320" width="180" height="160" as="geometry" />
+          <mxGeometry x="650" y="320" width="180" height="160" as="geometry" />
         </mxCell>
         <mxCell id="5X8hTqZDHeVMlVDzLUr4-195" value="" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=1;" vertex="1" parent="5X8hTqZDHeVMlVDzLUr4-194">
           <mxGeometry y="30" width="180" height="30" as="geometry" />
