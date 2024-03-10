@@ -10,7 +10,7 @@
 
 Design a simple information system for a bakery that manages information about the types of bread offered, both from a production perspective (ingredients, costs, etc.) and sales (orders). The bakery provides delivery with its own cars, or customers can arrange their own pickup. The system must allow the bakery management to plan production based on orders and provide information for delivery, etc.
 
-## Database Project Documentation
+# Database Project Documentation
 
 ## Part 1: Data Model (ERD) and Use Case Model
 
