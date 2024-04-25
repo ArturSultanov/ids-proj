@@ -909,28 +909,34 @@ BEGIN
     -- if current user is XSULTA01
     IF USER = 'XSULTA01' THEN
         FOR existing_table IN (SELECT table_name FROM user_tables ) LOOP
-            IF existing_table.TABLE_NAME in ('ADDRESS',
-                                             'ALLERGENS',
-                                             'CAR',
-                                             'COURIER',
-                                             'CUSTOMERS',
-                                             'DELIVERY_TICKET',
-                                             'EMPLOYEES',
-                                             'INGREDIENTS',
-                                             'ITEMS',
-                                             'ITEMS_CONSIST_OF_INGREDIENTS',
-                                             'ITEMS_CONTAINS_ALLERGENS',
-                                             'ORDERS',
-                                             'ORDER_CONTAINS_ITEMS',
-                                             'PERSONS',
-                                             'WORKER_SHIFT',
-                                             'WORKING_SHIFT') THEN
+--             IF existing_table.TABLE_NAME in ('ADDRESS',
+--                                              'ALLERGENS',
+--                                              'CAR',
+--                                              'COURIER',
+--                                              'CUSTOMERS',
+--                                              'DELIVERY_TICKET',
+--                                              'EMPLOYEES',
+--                                              'INGREDIENTS',
+--                                              'ITEMS',
+--                                              'ITEMS_CONSIST_OF_INGREDIENTS',
+--                                              'ITEMS_CONTAINS_ALLERGENS',
+--                                              'ORDERS',
+--                                              'ORDER_CONTAINS_ITEMS',
+--                                              'PERSONS',
+--                                              'WORKER_SHIFT',
+--                                              'WORKING_SHIFT') THEN
                 EXECUTE IMMEDIATE 'GRANT ALL ON ' || existing_table.TABLE_NAME || ' TO XSHCHE05';
-            END IF;
+            -- END IF;
         END LOOP;
     END IF;
 END;
 /
+
+GRANT EXECUTE ON ValidateStockForOrder TO XSHCHE05;
+GRANT EXECUTE ON CalculateTotalSales TO XSHCHE05;
+GRANT EXECUTE ON check_inventory TO XSHCHE05;
+
+
 
 COMMIT;
 
