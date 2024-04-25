@@ -903,7 +903,9 @@ VALUES (3, 2, 3, TO_DATE('2024-07-16', 'YYYY-MM-DD'),
         TO_TIMESTAMP('2024-12-31:12:00:00', 'YYYY-MM-DD:HH24:MI:SS'));
 /
 
-/******************** TABLES DROP ********************/
+-- COMMIT;
+
+/******************** TABLES GRANT ********************/
 BEGIN
     -- WARNING: Deleting all existing project tables
     -- if current user is XSULTA01
@@ -936,9 +938,26 @@ GRANT EXECUTE ON ValidateStockForOrder TO XSHCHE05;
 GRANT EXECUTE ON CalculateTotalSales TO XSHCHE05;
 GRANT EXECUTE ON check_inventory TO XSHCHE05;
 
+-- COMMIT;
 
+BEGIN
+    EXECUTE IMMEDIATE 'DROP MATERIALIZED VIEW XSULTA01.ADDR_UNDEV_ORD';
+EXCEPTION
+    WHEN OTHERS THEN
+        IF SQLCODE != -12003 THEN  -- -12003 is the error code if MV does not exist
+            RAISE;
+        END IF;
+END;
+/
+-- Materialized view showing addressed of undelivered orders
+CREATE MATERIALIZED VIEW ADDR_UNDEV_ORD
+REFRESH ON DEMAND AS
+    SELECT P.name || ' ' || P.surname, A.street || ' ' || A.building_number || ', ' || A.city
+    FROM XSULTA01.PERSONS P JOIN XSULTA01.ADDRESS A on A.PERSON_ID = A.PERSON_ID
+    JOIN XSULTA01.DELIVERY_TICKET DT on A.ADDRESS_ID = DT.ADDRESS_ID
+    WHERE DT.TICKET_STATUS = 'OPEN';
+SELECT * FROM ADDR_UNDEV_ORD;
 
-COMMIT;
 
 /***** Queries Utilizing JOINs  *****/
 
