@@ -901,6 +901,36 @@ INSERT INTO Delivery_Ticket (courier_id, address_id, order_id, delivery_date, ti
 VALUES (3, 2, 3, TO_DATE('2024-07-16', 'YYYY-MM-DD'),
         TO_TIMESTAMP('2024-12-31:09:00:00', 'YYYY-MM-DD:HH24:MI:SS'),
         TO_TIMESTAMP('2024-12-31:12:00:00', 'YYYY-MM-DD:HH24:MI:SS'));
+/
+
+/******************** TABLES DROP ********************/
+BEGIN
+    -- WARNING: Deleting all existing project tables
+    -- if current user is XSULTA01
+    IF USER = 'XSULTA01' THEN
+        FOR existing_table IN (SELECT table_name FROM user_tables ) LOOP
+            IF existing_table.TABLE_NAME in ('ADDRESS',
+                                             'ALLERGENS',
+                                             'CAR',
+                                             'COURIER',
+                                             'CUSTOMERS',
+                                             'DELIVERY_TICKET',
+                                             'EMPLOYEES',
+                                             'INGREDIENTS',
+                                             'ITEMS',
+                                             'ITEMS_CONSIST_OF_INGREDIENTS',
+                                             'ITEMS_CONTAINS_ALLERGENS',
+                                             'ORDERS',
+                                             'ORDER_CONTAINS_ITEMS',
+                                             'PERSONS',
+                                             'WORKER_SHIFT',
+                                             'WORKING_SHIFT') THEN
+                EXECUTE IMMEDIATE 'GRANT ALL ON ' || existing_table.TABLE_NAME || ' TO XSHCHE05';
+            END IF;
+        END LOOP;
+    END IF;
+END;
+/
 
 COMMIT;
 
@@ -950,11 +980,11 @@ ORDER BY delivery_ticket_count DESC;
 
 /***** Query Using EXISTS Predicate  *****/
 
--- Find customers who have placed at least 2 order.
+-- Find customers who have placed at least 2 order
 SELECT P.name, P.surname
 FROM Persons P
 WHERE EXISTS (
-    SELECT 2
+    SELECT 2 -- todo: CHECK
     FROM Customers C
     JOIN Orders O ON C.person_id = O.order_customer_id
     WHERE C.person_id = P.person_id
