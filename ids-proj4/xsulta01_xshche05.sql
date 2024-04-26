@@ -941,7 +941,7 @@ GRANT EXECUTE ON check_inventory TO XSHCHE05;
 -- COMMIT;
 
 BEGIN
-    EXECUTE IMMEDIATE 'DROP MATERIALIZED VIEW XSULTA01.ADDR_UNDEV_ORD';
+    EXECUTE IMMEDIATE 'DROP MATERIALIZED VIEW ADDR_UNDEV_ORD';
 EXCEPTION
     WHEN OTHERS THEN
         IF SQLCODE != -12003 THEN  -- -12003 is the error code if MV does not exist
@@ -952,8 +952,8 @@ END;
 -- Materialized view showing addressed of undelivered orders
 CREATE MATERIALIZED VIEW ADDR_UNDEV_ORD
 REFRESH ON DEMAND AS
-    SELECT P.name || ' ' || P.surname, A.street || ' ' || A.building_number || ', ' || A.city
-    FROM XSULTA01.PERSONS P JOIN XSULTA01.ADDRESS A on A.PERSON_ID = A.PERSON_ID
+    SELECT DISTINCT P.name || ' ' || P.surname, A.street || ' ' || A.building_number || ', ' || A.city
+    FROM XSULTA01.PERSONS P JOIN XSULTA01.ADDRESS A on P.PERSON_ID = A.PERSON_ID
     JOIN XSULTA01.DELIVERY_TICKET DT on A.ADDRESS_ID = DT.ADDRESS_ID
     WHERE DT.TICKET_STATUS = 'OPEN';
 SELECT * FROM ADDR_UNDEV_ORD;
@@ -1024,3 +1024,54 @@ WHERE I.item_article_number IN (
     SELECT OCI.oci_item_article_number
     FROM Order_contains_Items OCI
 );
+
+/***** EXPLAIN PLAN and indexes *****/
+
+-- NO INDEX: Find orders with comments which not delivered yet by courier
+EXPLAIN PLAN FOR
+SELECT
+    O.order_id,
+    O.order_customer_id,
+    O.order_status,
+    O.order_delivery_option,
+    O.order_date,
+    O.order_price,
+    O.order_comment,
+    P.name AS customer_name,
+    P.surname AS customer_surname
+FROM Orders O
+JOIN Customers C ON O.order_customer_id = C.person_id
+JOIN Persons P ON C.person_id = P.person_id
+WHERE O.order_delivery_option = 'COURIER_DELIVERY'
+AND O.order_status != 'COMPLETED'
+AND O.order_status != 'ARCHIVED'
+AND O.order_comment IS NOT NULL;
+SELECT * FROM TABLE(DBMS_XPLAN.DISPLAY);
+
+-- Create the indexes as previously discussed
+CREATE INDEX idx_order_delivery_option ON Orders(order_delivery_option);
+CREATE INDEX idx_order_date ON Orders(order_date);
+CREATE INDEX idx_order_price ON Orders(order_price);
+CREATE INDEX idx_order_comment ON Orders(order_comment);
+
+-- WITH INDEX: Find orders with comments which not delivered yet by courier
+EXPLAIN PLAN FOR
+SELECT
+    O.order_id,
+    O.order_customer_id,
+    O.order_status,
+    O.order_delivery_option,
+    O.order_date,
+    O.order_price,
+    O.order_comment,
+    P.name AS customer_name,
+    P.surname AS customer_surname
+FROM Orders O
+JOIN Customers C ON O.order_customer_id = C.person_id
+JOIN Persons P ON C.person_id = P.person_id
+WHERE O.order_delivery_option = 'COURIER_DELIVERY'
+AND O.order_status != 'COMPLETED'
+AND O.order_status != 'ARCHIVED'
+AND O.order_comment IS NOT NULL;
+SELECT * FROM TABLE(DBMS_XPLAN.DISPLAY);
+/
