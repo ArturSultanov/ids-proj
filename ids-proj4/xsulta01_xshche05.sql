@@ -1046,7 +1046,7 @@ WHERE O.order_delivery_option = 'COURIER_DELIVERY'
 AND O.order_status != 'COMPLETED'
 AND O.order_status != 'ARCHIVED'
 AND O.order_comment IS NOT NULL;
-SELECT * FROM TABLE(DBMS_XPLAN.DISPLAY);
+SELECT * FROM TABLE(DBMS_XPLAN.DISPLAY());
 
 -- Create the indexes as previously discussed
 CREATE INDEX idx_order_delivery_option ON Orders(order_delivery_option);
@@ -1073,5 +1073,5 @@ WHERE O.order_delivery_option = 'COURIER_DELIVERY'
 AND O.order_status != 'COMPLETED'
 AND O.order_status != 'ARCHIVED'
 AND O.order_comment IS NOT NULL;
-SELECT * FROM TABLE(DBMS_XPLAN.DISPLAY);
+SELECT * FROM TABLE(DBMS_XPLAN.DISPLAY());
 /
