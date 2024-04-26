@@ -1027,51 +1027,42 @@ WHERE I.item_article_number IN (
 
 /***** EXPLAIN PLAN and indexes *****/
 
--- NO INDEX: Find orders with comments which not delivered yet by courier
+-- NO INDEX: Find and sum orders with comments which not delivered yet by courier
 EXPLAIN PLAN FOR
-SELECT
-    O.order_id,
-    O.order_customer_id,
-    O.order_status,
-    O.order_delivery_option,
-    O.order_date,
-    O.order_price,
-    O.order_comment,
-    P.name AS customer_name,
-    P.surname AS customer_surname
-FROM Orders O
-JOIN Customers C ON O.order_customer_id = C.person_id
-JOIN Persons P ON C.person_id = P.person_id
-WHERE O.order_delivery_option = 'COURIER_DELIVERY'
-AND O.order_status != 'COMPLETED'
-AND O.order_status != 'ARCHIVED'
-AND O.order_comment IS NOT NULL;
+    SELECT C.person_id, P.name, P.surname,
+           SUM(O.order_price) AS total_order_price,
+           LISTAGG(DT.delivery_date, ', ') WITHIN GROUP (ORDER BY DT.delivery_date) AS delivery_dates
+    FROM Customers C
+    JOIN Persons P ON C.person_id = P.person_id
+    JOIN Orders O ON C.person_id = O.order_customer_id
+    JOIN Delivery_Ticket DT ON O.order_id = DT.order_id
+    WHERE O.order_delivery_option = 'COURIER_DELIVERY'
+    AND O.order_status != 'COMPLETED'
+    AND O.order_status != 'ARCHIVED'
+    AND O.order_comment IS NOT NULL
+    GROUP BY C.person_id, P.name, P.surname;
 SELECT * FROM TABLE(DBMS_XPLAN.DISPLAY());
 
--- Create the indexes as previously discussed
+-- Create the suggested indexes
 CREATE INDEX idx_order_delivery_option ON Orders(order_delivery_option);
 CREATE INDEX idx_order_date ON Orders(order_date);
 CREATE INDEX idx_order_price ON Orders(order_price);
 CREATE INDEX idx_order_comment ON Orders(order_comment);
+CREATE INDEX idx_order_status ON Orders(order_status);
 
 -- WITH INDEX: Find orders with comments which not delivered yet by courier
 EXPLAIN PLAN FOR
-SELECT
-    O.order_id,
-    O.order_customer_id,
-    O.order_status,
-    O.order_delivery_option,
-    O.order_date,
-    O.order_price,
-    O.order_comment,
-    P.name AS customer_name,
-    P.surname AS customer_surname
-FROM Orders O
-JOIN Customers C ON O.order_customer_id = C.person_id
-JOIN Persons P ON C.person_id = P.person_id
-WHERE O.order_delivery_option = 'COURIER_DELIVERY'
-AND O.order_status != 'COMPLETED'
-AND O.order_status != 'ARCHIVED'
-AND O.order_comment IS NOT NULL;
+    SELECT C.person_id, P.name, P.surname,
+           SUM(O.order_price) AS total_order_price,
+           LISTAGG(DT.delivery_date, ', ') WITHIN GROUP (ORDER BY DT.delivery_date) AS delivery_dates
+    FROM Customers C
+    JOIN Persons P ON C.person_id = P.person_id
+    JOIN Orders O ON C.person_id = O.order_customer_id
+    JOIN Delivery_Ticket DT ON O.order_id = DT.order_id
+    WHERE O.order_delivery_option = 'COURIER_DELIVERY'
+    AND O.order_status != 'COMPLETED'
+    AND O.order_status != 'ARCHIVED'
+    AND O.order_comment IS NOT NULL
+    GROUP BY C.person_id, P.name, P.surname;
 SELECT * FROM TABLE(DBMS_XPLAN.DISPLAY());
 /
