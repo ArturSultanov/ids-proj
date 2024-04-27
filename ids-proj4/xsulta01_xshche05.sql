@@ -244,7 +244,8 @@ CREATE TABLE Car (
         PRIMARY KEY,
     cost_of_maintenance DECIMAL
         NOT NULL,
-    courier_id INT UNIQUE, -- todo TRIGGER ONE COURIER - ONE CAR
+    courier_id INT
+        UNIQUE,
 
     /* ===== Constraints ===== */
     CONSTRAINT cost_of_maintenance_check
@@ -508,19 +509,23 @@ DECLARE
         FROM Items_consist_of_Ingredients
         WHERE icoi_article_number = :NEW.oci_item_article_number;
     v_ingredient_stock INT;
+    v_ingredient_name VARCHAR2(255);
 BEGIN
     FOR ingredient IN item_ingredients LOOP
         -- get stock
-        SELECT ingredient_count INTO v_ingredient_stock FROM Ingredients WHERE ingredient_id = ingredient.icoi_ingredient_id;
+        SELECT ingredient_count, ingredient_name INTO v_ingredient_stock, v_ingredient_name FROM Ingredients WHERE ingredient_id = ingredient.icoi_ingredient_id;
         IF ingredient.icoi_ingredients_count * :NEW.oci_items_count > v_ingredient_stock THEN
-            DBMS_OUTPUT.PUT_LINE('Insufficient stock for item: ' || :NEW.oci_item_article_number);
+            DBMS_OUTPUT.PUT_LINE('Insufficient stock ' || v_ingredient_name || ' for item: ' || :NEW.oci_item_article_number);
             DBMS_OUTPUT.PUT_LINE('Not enough ' || ingredient.icoi_ingredient_id || ' in stock.');
         END IF;
     END LOOP;
 END;
 /
 
---  todo: example
+-- EXAMPLE:
+-- INSERT INTO Order_contains_Items (oci_order_id, oci_item_article_number, oci_items_count)
+-- VALUES (1, 2, 1000); -- Adding 1000 Croissants to order ID 1
+
 
 /******************** PROCEDURES  ********************/
 
@@ -558,7 +563,7 @@ BEGIN
             SELECT ingredient_count, ingredient_name INTO v_ingredient_count, v_ingredient_name FROM Ingredients WHERE ingredient_id = ingredient.icoi_ingredient_id;
 
             IF (ingredient.icoi_ingredients_count * item.oci_items_count) > v_ingredient_count THEN
-                DBMS_OUTPUT.PUT_LINE('Insufficient stock for item: ' || item.oci_item_article_number);
+                DBMS_OUTPUT.PUT_LINE('Insufficient stock ' || v_ingredient_name || ' for item: ' || item.oci_item_article_number);
                 DBMS_OUTPUT.PUT_LINE('Not enough ' || v_ingredient_name || ' in stock.');
             ELSE
                 DBMS_OUTPUT.PUT_LINE('Sufficient stock ingredient ' || v_ingredient_name || ' for item: ' || item.oci_item_article_number);
@@ -638,8 +643,7 @@ END;
 -- EXAMPLE:
 -- BEGIN
 --     CheckIngredientInventory();
--- end;
-
+-- END;
 
 CREATE OR REPLACE PROCEDURE BindCourierToCar(
     p_courier_id INT,
@@ -653,15 +657,17 @@ BEGIN
     FROM Car
     WHERE registration_number = p_registration_number;
 
---     IF v_current_courier_id IS NOT NULL AND v_current_courier_id != p_courier_id THEN
---         RAISE_APPLICATION_ERROR(-20001, 'This car is already assigned to another courier.');
---     ELSE
-        -- Bind the courier to the car
-        UPDATE Car SET
-        courier_id = p_courier_id
-        WHERE registration_number = p_registration_number;
-    -- END IF;
+    -- Bind the courier to the car
+    UPDATE Car SET
+    courier_id = p_courier_id
+    WHERE registration_number = p_registration_number;
+
 END;
+
+-- EXAMPLE:
+-- SELECT * FROM Car;
+-- CALL BindCourierToCar(5, '6XYZ789');
+-- SELECT * FROM Car;
 
 
 /******************** DATA INSERTION  ********************/
@@ -955,6 +961,7 @@ BEGIN
         EXECUTE IMMEDIATE 'GRANT EXECUTE ON ValidateStockForOrder TO XSHCHE05';
         EXECUTE IMMEDIATE 'GRANT EXECUTE ON CalculateTotalSales TO XSHCHE05';
         EXECUTE IMMEDIATE 'GRANT EXECUTE ON CheckIngredientInventory TO XSHCHE05';
+        EXECUTE IMMEDIATE 'GRANT EXECUTE ON BindCourierToCar TO XSHCHE05';
     END IF;
 END;
 /
@@ -1047,7 +1054,9 @@ WHERE I.item_article_number IN (
     FROM Order_contains_Items OCI
 );
 
-/***** Query Using Subquery in FROM Clause *****/
+/***** Query Using SELECT WITH CASE *****/
+
+-- Find the total price of orders for each customer.
 WITH OrderDetails AS (
     SELECT
         O.order_id,
@@ -1073,6 +1082,31 @@ SELECT
     order_comment
 FROM OrderDetails
 ORDER BY order_price DESC;
+
+-- Show the infroamtion about the courier and the car is being used.
+WITH CarUsage AS (
+    SELECT
+        c.registration_number,
+        c.cost_of_maintenance,
+        CASE
+            WHEN c.courier_id IS NOT NULL THEN 'In Use'
+            ELSE 'Not In Use'
+        END AS Usage_Status,
+        co.person_id AS Courier_ID,
+        co.contact_phone_number
+    FROM
+        Car c
+    LEFT JOIN
+        Courier co ON c.courier_id = co.person_id
+)
+SELECT
+    registration_number,
+    cost_of_maintenance,
+    Usage_Status,
+    Courier_ID,
+    contact_phone_number
+FROM
+    CarUsage;
 
 /***** EXPLAIN PLAN and indexes *****/
 
@@ -1115,30 +1149,3 @@ EXPLAIN PLAN FOR
     GROUP BY C.person_id, P.name, P.surname;
 SELECT * FROM TABLE(DBMS_XPLAN.DISPLAY());
 /
-
-WITH CarUsage AS (
-    SELECT
-        c.registration_number,
-        c.cost_of_maintenance,
-        CASE
-            WHEN c.courier_id IS NOT NULL THEN 'In Use'
-            ELSE 'Not In Use'
-        END AS Usage_Status,
-        co.person_id AS Courier_ID,
-        co.contact_phone_number
-    FROM
-        Car c
-    LEFT JOIN
-        Courier co ON c.courier_id = co.person_id
-)
-SELECT
-    registration_number,
-    cost_of_maintenance,
-    Usage_Status,
-    Courier_ID,
-    contact_phone_number
-FROM
-    CarUsage;
-/
-
--- TODO: examples down, trigger for courier car, with-case, comments
