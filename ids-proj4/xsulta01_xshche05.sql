@@ -743,35 +743,35 @@ VALUES (12, 'Cocoa powder', 'A powder made from roasted and ground cacao seeds, 
 
 /***** ITEMS  *****/
 
-INSERT INTO Items (item_article_number, item_name, item_description, item_price, inventory_count)
-VALUES (1, 'French Baguette', 'A long, thin loaf of French bread known for its crisp crust and chewy texture.', 2.50, 100);
+INSERT INTO Items (item_article_number, item_name, item_description, item_price)
+VALUES (1, 'French Baguette', 'A long, thin loaf of French bread known for its crisp crust and chewy texture.', 2.50);
 
-INSERT INTO Items (item_article_number, item_name, item_description, item_price, inventory_count)
-VALUES (2, 'Croissant', 'A buttery, flaky, viennoiserie pastry of Austrian origin, named for its historical crescent shape.', 1.75, 90);
+INSERT INTO Items (item_article_number, item_name, item_description, item_price)
+VALUES (2, 'Croissant', 'A buttery, flaky, viennoiserie pastry of Austrian origin, named for its historical crescent shape.', 1.75);
 
-INSERT INTO Items (item_article_number, item_name, item_description, item_price, inventory_count)
-VALUES (3, 'Chocolate Cake', 'A rich, moist chocolate cake with a layer of creamy chocolate frosting.', 4.00, 80);
+INSERT INTO Items (item_article_number, item_name, item_description, item_price)
+VALUES (3, 'Chocolate Cake', 'A rich, moist chocolate cake with a layer of creamy chocolate frosting.', 4.00);
 
-INSERT INTO Items (item_article_number, item_name, item_description, item_price, inventory_count)
-VALUES (4, 'Blueberry Muffin', 'A soft and fluffy muffin packed with fresh blueberries.', 1.50, 70);
+INSERT INTO Items (item_article_number, item_name, item_description, item_price)
+VALUES (4, 'Blueberry Muffin', 'A soft and fluffy muffin packed with fresh blueberries.', 1.50);
 
-INSERT INTO Items (item_article_number, item_name, item_description, item_price, inventory_count)
-VALUES (5, 'Sourdough Bread', 'A type of bread made with naturally occurring lactic acid bacteria and yeast.', 3.50, 60);
+INSERT INTO Items (item_article_number, item_name, item_description, item_price)
+VALUES (5, 'Sourdough Bread', 'A type of bread made with naturally occurring lactic acid bacteria and yeast.', 3.50);
 
-INSERT INTO Items (item_article_number, item_name, item_description, item_price, inventory_count)
-VALUES (6, 'Cinnamon Roll', 'A sweet roll served commonly in Northern Europe and North America, known for its spiral of cinnamon sugar.', 2.00, 50);
+INSERT INTO Items (item_article_number, item_name, item_description, item_price)
+VALUES (6, 'Cinnamon Roll', 'A sweet roll served commonly in Northern Europe and North America, known for its spiral of cinnamon sugar.', 2.00);
 
-INSERT INTO Items (item_article_number, item_name, item_description, item_price, inventory_count)
-VALUES (7, 'Apple Pie', 'A fruit pie in which the principal filling ingredient is apple, spiced with cinnamon, nutmeg, and sugar.', 3.25, 40);
+INSERT INTO Items (item_article_number, item_name, item_description, item_price)
+VALUES (7, 'Apple Pie', 'A fruit pie in which the principal filling ingredient is apple, spiced with cinnamon, nutmeg, and sugar.', 3.25);
 
-INSERT INTO Items (item_article_number, item_name, item_description, item_price, inventory_count)
-VALUES (8, 'Pumpkin Bread', 'A type of moist quick bread made with pumpkin puree and spices like nutmeg and cinnamon.', 2.75, 30);
+INSERT INTO Items (item_article_number, item_name, item_description, item_price)
+VALUES (8, 'Pumpkin Bread', 'A type of moist quick bread made with pumpkin puree and spices like nutmeg and cinnamon.', 2.75);
 
-INSERT INTO Items (item_article_number, item_name, item_description, item_price, inventory_count)
-VALUES (9, 'Cheesecake', 'A sweet dessert consisting of one or more layers, with the main and thickest layer containing a mixture of soft, fresh cheese, eggs, and sugar.', 4.50, 20);
+INSERT INTO Items (item_article_number, item_name, item_description, item_price)
+VALUES (9, 'Cheesecake', 'A sweet dessert consisting of one or more layers, with the main and thickest layer containing a mixture of soft, fresh cheese, eggs, and sugar.', 4.50);
 
-INSERT INTO Items (item_article_number, item_name, item_description, item_price, inventory_count)
-VALUES(10, 'Rye Bread', 'Bread made with various percentages of flour from rye grain, known for its dark color and dense texture.', 3.00, 10);
+INSERT INTO Items (item_article_number, item_name, item_description, item_price)
+VALUES(10, 'Rye Bread', 'Bread made with various percentages of flour from rye grain, known for its dark color and dense texture.', 3.00);
 
 /***** Items consist of Ingredients  *****/
 
