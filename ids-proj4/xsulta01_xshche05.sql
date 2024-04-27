@@ -107,7 +107,7 @@ CREATE TABLE Courier (
     person_id INT
         PRIMARY KEY,
     completed_orders_amount INT
-        DEFAULT 0,
+        DEFAULT 0, -- todo: add trigger
     contact_phone_number VARCHAR2(255)
         NOT NULL,
 
@@ -267,7 +267,7 @@ CREATE TABLE Car (
     cost_of_maintenance DECIMAL
         NOT NULL,
     courier_id INT
-        UNIQUE,
+        UNIQUE, -- todo TRIGGER ONE COURIER - ONE CAR
 
     /* ===== Constraints ===== */
     CONSTRAINT cost_of_maintenance_check
@@ -501,6 +501,7 @@ END;
 /
 
 -- EXAMPLE:
+
 -- BEGIN
 --     ValidateStockForOrder(1);
 -- END;
@@ -515,35 +516,36 @@ END;
 -- SELECT * FROM ORDERS;
 -- SELECT * FROM COURIER;
 
+
+
 /*
 This trigger is executed after a new record is inserted into the Order_contains_Items table.
 It adjusts the inventory count in the Items table by subtracting the ordered quantity and checks if the updated inventory level
 is below zero or within a low stock threshold. It outputs relevant messages for low or negative inventory levels but
 allows the order to be processed even if the inventory goes negative, accommodating business models that support backorders.
 */
--- TODO: replace item_count to ingredien_count
--- CREATE OR REPLACE TRIGGER trg_update_inventory
--- AFTER INSERT ON Order_contains_Items
--- FOR EACH ROW
--- DECLARE
---   v_inventory_count INT;
--- BEGIN
---   -- Retrieve the current inventory count for the item
---   SELECT inventory_count INTO v_inventory_count FROM Items WHERE item_article_number = :NEW.oci_item_article_number;
---
---   -- Deduct the ordered quantity from the inventory, even if it goes negative
---   UPDATE Items
---   SET inventory_count = v_inventory_count - :NEW.oci_items_count
---   WHERE item_article_number = :NEW.oci_item_article_number;
---
---   -- Check the new inventory level
---   IF v_inventory_count - :NEW.oci_items_count < 0 THEN
---     DBMS_OUTPUT.PUT_LINE('Inventory went negative for item ID ' || :NEW.oci_item_article_number || '. Current stock: ' || (v_inventory_count - :NEW.oci_items_count));
---   ELSIF v_inventory_count - :NEW.oci_items_count <= 5 THEN
---     DBMS_OUTPUT.PUT_LINE('Inventory low for item ID ' || :NEW.oci_item_article_number || '. Remaining stock: ' || (v_inventory_count - :NEW.oci_items_count));
---   END IF;
--- END;
--- /
+CREATE OR REPLACE TRIGGER trg_update_inventory
+AFTER INSERT ON Order_contains_Items
+FOR EACH ROW
+DECLARE
+    CURSOR item_ingredients IS
+        SELECT *
+        FROM Items_consist_of_Ingredients
+        WHERE icoi_article_number = :NEW.oci_item_article_number;
+    v_ingredient_stock INT;
+BEGIN
+    FOR ingredient IN item_ingredients LOOP
+        -- get stock
+        SELECT ingredient_count INTO v_ingredient_stock FROM Ingredients WHERE ingredient_id = ingredient.icoi_ingredient_id;
+        IF ingredient.icoi_ingredients_count * :NEW.oci_items_count > v_ingredient_stock THEN
+            DBMS_OUTPUT.PUT_LINE('Insufficient stock for item: ' || :NEW.oci_item_article_number);
+            DBMS_OUTPUT.PUT_LINE('Not enough ' || ingredient.icoi_ingredient_id || ' in stock.');
+        END IF;
+    END LOOP;
+END;
+/
+
+--  todo: example
 
 /******************** PROCEDURES  ********************/
 
@@ -553,53 +555,49 @@ utilizing %ROWTYPE for processing rows of item data.
 It checks if sufficient stock is available for each item in an order before processing.
 It uses a cursor to fetch item IDs and required quantities, checking these against the inventory.
 */
--- TODO: replace item_count to ingredien_count
--- CREATE OR REPLACE PROCEDURE ValidateStockForOrder(p_order_id ORDERS.order_id%TYPE) IS
---   v_item_stock Items.inventory_count%TYPE;
---   v_required_stock Order_contains_Items.oci_items_count%TYPE;
---   v_item_id Order_contains_Items.oci_item_article_number%TYPE;
---
---   CURSOR order_items IS
---     SELECT oci_item_article_number, oci_items_count
---     FROM Order_contains_Items
---     WHERE oci_order_id = p_order_id;
---
---   insufficient_stock EXCEPTION;
--- BEGIN
---   OPEN order_items;
---   LOOP
---     FETCH order_items INTO v_item_id, v_required_stock;
---     EXIT WHEN order_items%NOTFOUND;
---
---     SELECT inventory_count INTO v_item_stock FROM Items WHERE item_article_number = v_item_id;
---
---     IF v_item_stock < v_required_stock THEN
---       RAISE insufficient_stock;
---     END IF;
---   END LOOP;
---   CLOSE order_items;
---
---   DBMS_OUTPUT.PUT_LINE('All items have sufficient stock for order ID: ' || p_order_id);
---
---   -- If all items have sufficient stock, update the order status
---   UPDATE Orders
---   SET order_status = 'IN_PROGRESS'
---   WHERE order_id = p_order_id;
---
---   COMMIT;  -- Ensure changes are committed to the database
---
---   DBMS_OUTPUT.PUT_LINE('Order ID: ' || p_order_id || ' is now in progress.');
---
--- EXCEPTION
---   WHEN insufficient_stock THEN
---     DBMS_OUTPUT.PUT_LINE('Insufficient stock for one or more items in order ID: ' || p_order_id);
---     ROLLBACK;  -- Rollback any changes if not all items have sufficient stock
---   WHEN NO_DATA_FOUND THEN
---     DBMS_OUTPUT.PUT_LINE('No items found for order ID: ' || p_order_id);
---   WHEN OTHERS THEN
---     DBMS_OUTPUT.PUT_LINE('Error validating stock for order ID: ' || p_order_id || ': ' || SQLERRM);
--- END ValidateStockForOrder;
--- /
+CREATE OR REPLACE PROCEDURE ValidateStockForOrder(p_order_id ORDERS.order_id%TYPE) IS
+    CURSOR order_items IS
+        SELECT *
+        FROM Order_contains_Items
+        WHERE oci_order_id = p_order_id;
+    CURSOR item_ingredients IS
+        SELECT *
+        FROM Items_consist_of_Ingredients
+        WHERE icoi_article_number = p_order_id;
+    v_order_id ORDERS.order_id%TYPE := p_order_id;
+    v_order_status ORDERS.order_status%TYPE;
+    v_ingredient_count INT;
+    v_ingredient_name VARCHAR2(255);
+BEGIN
+    OPEN order_items;
+    OPEN item_ingredients;
+    -- get order status
+    SELECT order_status INTO v_order_status FROM Orders WHERE order_id = v_order_id;
+    IF v_order_status != 'NEW' THEN
+--         DBMS_OUTPUT.PUT_LINE('Order status is not NEW. Cannot validate stock.');
+        RETURN;
+    END IF;
+    FOR item IN order_items LOOP
+        FOR ingredient IN item_ingredients LOOP
+            -- get ingredient count
+            SELECT ingredient_count, ingredient_name INTO v_ingredient_count, v_ingredient_name FROM Ingredients WHERE ingredient_id = ingredient.icoi_ingredient_id;
+
+            IF (ingredient.icoi_ingredients_count * item.oci_items_count) > v_ingredient_count THEN
+                DBMS_OUTPUT.PUT_LINE('Insufficient stock for item: ' || item.oci_item_article_number);
+                DBMS_OUTPUT.PUT_LINE('Not enough ' || v_ingredient_name || ' in stock.');
+            ELSE
+                DBMS_OUTPUT.PUT_LINE('Sufficient stock for item: ' || item.oci_item_article_number);
+                UPDATE Ingredients SET ingredient_count = ingredient_count - (ingredient.icoi_ingredients_count * item.oci_items_count)
+                WHERE ingredient_id = ingredient.icoi_ingredient_id;
+                UPDATE Orders SET order_status = 'IN_PROGRESS'
+                WHERE order_id = v_order_id;
+            END IF;
+        END LOOP;
+    END LOOP;
+    CLOSE order_items;
+    CLOSE item_ingredients;
+END ValidateStockForOrder;
+/
 
 /*
 This procedure will calculate the total amount of sales for each customer and print the results.
@@ -645,11 +643,15 @@ This simply goes through all items and prints out a message if the stock is belo
 */
 CREATE OR REPLACE PROCEDURE CheckIngredientInventory IS
     CURSOR inventory_cursor IS
-        SELECT * FROM INGREDIENTS WHERE ingredient_count <= 20;
+        SELECT * FROM INGREDIENTS;
     rec Items%ROWTYPE;
 BEGIN
     FOR rec IN inventory_cursor LOOP
-        DBMS_OUTPUT.PUT_LINE('Low inventory alert for Ingredient: ' || rec.ingredient_name || ': ' || rec.ingredient_count || ' remaining');
+        if rec.ingredient_count <= 20 THEN
+            DBMS_OUTPUT.PUT_LINE('Low inventory alert for ingredient ' || rec.ingredient_name || ': ' || rec.ingredient_count || ' remaining');
+        else
+            DBMS_OUTPUT.PUT_LINE('Ingredient ' || rec.ingredient_name || ': ' || rec.ingredient_count || ' remaining');
+        END IF;
     END LOOP;
 EXCEPTION
     WHEN OTHERS THEN
@@ -657,10 +659,12 @@ EXCEPTION
 END;
 /
 
+
+-- EXAMPLE:
+
 -- BEGIN
 --     CheckIngredientInventory();
 -- end;
-
 
 
 /******************** DATA INSERTION  ********************/
@@ -934,41 +938,20 @@ VALUES (3, 2, 3, TO_DATE('2024-07-16', 'YYYY-MM-DD'),
         TO_TIMESTAMP('2024-12-31:12:00:00', 'YYYY-MM-DD:HH24:MI:SS'));
 /
 
--- COMMIT;
-
 /******************** TABLES GRANT ********************/
 BEGIN
     -- WARNING: Deleting all existing project tables
     -- if current user is XSULTA01
     IF USER = 'XSULTA01' THEN
         FOR existing_table IN (SELECT table_name FROM user_tables ) LOOP
---             IF existing_table.TABLE_NAME in ('ADDRESS',
---                                              'ALLERGENS',
---                                              'CAR',
---                                              'COURIER',
---                                              'CUSTOMERS',
---                                              'DELIVERY_TICKET',
---                                              'EMPLOYEES',
---                                              'INGREDIENTS',
---                                              'ITEMS',
---                                              'ITEMS_CONSIST_OF_INGREDIENTS',
---                                              'ITEMS_CONTAINS_ALLERGENS',
---                                              'ORDERS',
---                                              'ORDER_CONTAINS_ITEMS',
---                                              'PERSONS',
---                                              'WORKER_SHIFT',
---                                              'WORKING_SHIFT') THEN
-                EXECUTE IMMEDIATE 'GRANT ALL ON ' || existing_table.TABLE_NAME || ' TO XSHCHE05';
-            -- END IF;
+            EXECUTE IMMEDIATE 'GRANT ALL ON ' || existing_table.TABLE_NAME || ' TO XSHCHE05';
         END LOOP;
+        EXECUTE IMMEDIATE 'GRANT EXECUTE ON ValidateStockForOrder TO XSHCHE05';
+        EXECUTE IMMEDIATE 'GRANT EXECUTE ON CalculateTotalSales TO XSHCHE05';
+        EXECUTE IMMEDIATE 'GRANT EXECUTE ON CheckIngredientInventory TO XSHCHE05';
     END IF;
 END;
 /
-
-GRANT EXECUTE ON ValidateStockForOrder TO XSHCHE05;
-GRANT EXECUTE ON CalculateTotalSales TO XSHCHE05;
-GRANT EXECUTE ON CheckIngredientInventory TO XSHCHE05;
-
 
 COMMIT;
 
@@ -981,7 +964,8 @@ EXCEPTION
         END IF;
 END;
 /
--- Materialized view showing addressed of undelivered orders
+
+-- Materialized view showing unique addressed of undelivered orders
 CREATE MATERIALIZED VIEW ADDR_UNDEV_ORD
 REFRESH ON DEMAND AS
     SELECT DISTINCT P.name || ' ' || P.surname, A.street || ' ' || A.building_number || ', ' || A.city
@@ -1040,12 +1024,12 @@ ORDER BY delivery_ticket_count DESC;
 -- Find customers who have placed at least 2 order
 SELECT P.name, P.surname
 FROM Persons P
-WHERE EXISTS (
-    SELECT 2
+WHERE (
+    SELECT COUNT(O.order_id)
     FROM Customers C
     JOIN Orders O ON C.person_id = O.order_customer_id
     WHERE C.person_id = P.person_id
-);
+) >= 2;
 
 /***** Query Using IN with a Nested SELECT *****/
 
