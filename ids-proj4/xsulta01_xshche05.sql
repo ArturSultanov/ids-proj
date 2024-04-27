@@ -482,15 +482,13 @@ END;
 
 -- EXAMPLE:
 
--- BEGIN
---     ValidateStockForOrder(1);
--- END;
---
+-- CALL ValidateStockForOrder(1);
 -- SELECT * FROM ORDERS;
 -- SELECT * FROM COURIER;
 --
 -- UPDATE DELIVERY_TICKET DT SET DT.ticket_status = 'DELIVERED' WHERE DT.order_id =
 --     (SELECT O.order_id FROM Orders O WHERE O.order_status = 'IN_PROGRESS'
+--                                        AND O.order_delivery_option = 'COURIER_DELIVERY'
 --     FETCH FIRST 1 ROW ONLY);
 --
 -- SELECT * FROM ORDERS;
@@ -549,8 +547,6 @@ CREATE OR REPLACE PROCEDURE ValidateStockForOrder(p_order_id ORDERS.order_id%TYP
     v_ingredient_count INT;
     v_ingredient_name VARCHAR2(255);
 BEGIN
-    -- OPEN order_items;
-    -- OPEN item_ingredients;
     -- get order status
     SELECT order_status INTO v_order_status FROM Orders WHERE order_id = v_order_id;
     IF v_order_status != 'NEW' THEN
@@ -574,13 +570,13 @@ BEGIN
             END IF;
         END LOOP;
     END LOOP;
-    -- CLOSE order_items;
-    -- CLOSE item_ingredients;
 END ValidateStockForOrder;
 /
 
 -- EXAMPLE:
--- CALL ValidateStockForOrder(1);
+-- SELECT * FROM Ingredients;
+-- CALL ValidateStockForOrder(2);
+-- SELECT * FROM Ingredients;
 
 /*
 This procedure will calculate the total amount of sales for each customer and print the results.
@@ -590,33 +586,24 @@ CREATE OR REPLACE PROCEDURE CalculateTotalSales AS
         SELECT * FROM Customers;
     v_row Customers%ROWTYPE;
 BEGIN
-    OPEN customers_cursor;
-    LOOP
-        FETCH customers_cursor INTO v_row;
-        EXIT WHEN customers_cursor%NOTFOUND;
-
+    FOR v_row IN customers_cursor LOOP
         DECLARE
             total_sales DECIMAL := 0;
             customer_name VARCHAR2(255) := '';
         BEGIN
             SELECT SUM(order_price) INTO total_sales FROM Orders WHERE order_customer_id = v_row.person_id;
             SELECT DISTINCT P.name || ' ' || P.surname INTO customer_name
-                                              FROM Orders O JOIN Persons P on O.order_customer_id = P.person_id
-                                                  WHERE order_customer_id = v_row.person_id;
+            FROM Orders O JOIN Persons P on O.order_customer_id = P.person_id
+            WHERE order_customer_id = v_row.person_id;
             DBMS_OUTPUT.PUT_LINE('Total sales for customer ' || customer_name || ': ' || total_sales);
-        EXCEPTION
-            WHEN NO_DATA_FOUND THEN
-                DBMS_OUTPUT.PUT_LINE('No sales data found for customer ' || customer_name);
-            WHEN OTHERS THEN
-                DBMS_OUTPUT.PUT_LINE('Error calculating sales for customer ' || customer_name || ': ' || SQLERRM);
         END;
     END LOOP;
-    CLOSE customers_cursor;
 END CalculateTotalSales;
 /
 
 -- EXAMPLE:
 -- CALL CalculateTotalSales();
+
 
 /*
 Checks which items have low inventory and sends a restock notification.
@@ -641,13 +628,13 @@ END;
 /
 
 -- EXAMPLE:
--- BEGIN
---     CheckIngredientInventory();
--- END;
+-- CALL CheckIngredientInventory();
+
+
 
 CREATE OR REPLACE PROCEDURE BindCourierToCar(
     p_courier_id INT,
-    p_registration_number VARCHAR2
+    p_registration_number Car.registration_number%TYPE
 )
 AS
     v_current_courier_id INT;
@@ -663,6 +650,7 @@ BEGIN
     WHERE registration_number = p_registration_number;
 
 END;
+/
 
 -- EXAMPLE:
 -- SELECT * FROM Car;
@@ -1056,34 +1044,35 @@ WHERE I.item_article_number IN (
 
 /***** Query Using SELECT WITH CASE *****/
 
--- Find the total price of orders for each customer.
+
+-- Find completed orders and show the delivery type, along with the customer name and order price.
 WITH OrderDetails AS (
     SELECT
         O.order_id,
         P.name || ' ' || P.surname AS customer_name,
-        O.order_status,
         O.order_price,
         O.order_delivery_option,
         CASE
             WHEN O.order_delivery_option = 'COURIER_DELIVERY'
                 THEN 'Delivery by Courier'
             ELSE 'Customer Pickup'
-        END AS delivery_type,
-        O.order_comment
+        END AS delivery_type
     FROM Orders O
     JOIN Customers C ON O.order_customer_id = C.person_id
     JOIN Persons P ON C.person_id = P.person_id
+    WHERE O.order_status = 'COMPLETED'
 )
 SELECT
     order_id,
     customer_name,
-    order_status,
     delivery_type,
-    order_comment
+    order_price
 FROM OrderDetails
 ORDER BY order_price DESC;
 
--- Show the infroamtion about the courier and the car is being used.
+
+
+-- Show the information about the courier and the car is being used.
 WITH CarUsage AS (
     SELECT
         c.registration_number,
@@ -1107,6 +1096,7 @@ SELECT
     contact_phone_number
 FROM
     CarUsage;
+
 
 /***** EXPLAIN PLAN and indexes *****/
 
