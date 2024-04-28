@@ -712,7 +712,7 @@ VALUES (14, 'Sulphur dioxide and sulphites', 'Commonly used as a preservative in
 /***** INGREDIENTS  *****/
 
 INSERT INTO Ingredients (ingredient_id, ingredient_name, ingredient_description, ingredient_price, ingredient_count)
-VALUES (1, 'Margarine', 'A butter substitute made from vegetable oils or animal fats.', 2.50, 10);
+VALUES (1, 'Margarine', 'A butter substitute made from vegetable oils or animal fats.', 2.50, 18);
 
 INSERT INTO Ingredients (ingredient_id, ingredient_name, ingredient_description, ingredient_price, ingredient_count)
 VALUES (2, 'Milk', 'A nutrient-rich liquid food produced by the mammary glands of mammals.', 1.20, 90);
@@ -770,14 +770,14 @@ VALUES (6, 'Cinnamon Roll', 'A sweet roll served commonly in Northern Europe and
 INSERT INTO Items (item_article_number, item_name, item_description, item_price)
 VALUES (7, 'Apple Pie', 'A fruit pie in which the principal filling ingredient is apple, spiced with cinnamon, nutmeg, and sugar.', 3.25);
 
-INSERT INTO Items (item_article_number, item_name, item_description, item_price)
-VALUES (8, 'Pumpkin Bread', 'A type of moist quick bread made with pumpkin puree and spices like nutmeg and cinnamon.', 2.75);
-
-INSERT INTO Items (item_article_number, item_name, item_description, item_price)
-VALUES (9, 'Cheesecake', 'A sweet dessert consisting of one or more layers, with the main and thickest layer containing a mixture of soft, fresh cheese, eggs, and sugar.', 4.50);
-
-INSERT INTO Items (item_article_number, item_name, item_description, item_price)
-VALUES(10, 'Rye Bread', 'Bread made with various percentages of flour from rye grain, known for its dark color and dense texture.', 3.00);
+-- INSERT INTO Items (item_article_number, item_name, item_description, item_price)
+-- VALUES (8, 'Pumpkin Bread', 'A type of moist quick bread made with pumpkin puree and spices like nutmeg and cinnamon.', 2.75);
+--
+-- INSERT INTO Items (item_article_number, item_name, item_description, item_price)
+-- VALUES (9, 'Cheesecake', 'A sweet dessert consisting of one or more layers, with the main and thickest layer containing a mixture of soft, fresh cheese, eggs, and sugar.', 4.50);
+--
+-- INSERT INTO Items (item_article_number, item_name, item_description, item_price)
+-- VALUES(10, 'Rye Bread', 'Bread made with various percentages of flour from rye grain, known for its dark color and dense texture.', 3.00);
 
 /***** Items consist of Ingredients  *****/
 
@@ -804,6 +804,39 @@ INSERT INTO Items_consist_of_Ingredients (icoi_article_number, icoi_ingredient_i
 VALUES (3, 6, 2); -- Sugar for Chocolate Cake
 INSERT INTO Items_consist_of_Ingredients (icoi_article_number, icoi_ingredient_id, icoi_ingredients_count)
 VALUES (3, 12, 1); -- Cocoa Powder for Chocolate Cake
+
+-- Ingredients for Blueberry Muffin
+INSERT INTO Items_consist_of_Ingredients (icoi_article_number, icoi_ingredient_id, icoi_ingredients_count)
+VALUES (4, 4, 2); -- Flour for Blueberry Muffin
+INSERT INTO Items_consist_of_Ingredients (icoi_article_number, icoi_ingredient_id, icoi_ingredients_count)
+VALUES (4, 6, 1); -- Sugar for Blueberry Muffin
+INSERT INTO Items_consist_of_Ingredients (icoi_article_number, icoi_ingredient_id, icoi_ingredients_count)
+VALUES (4, 3, 1); -- Butter for Blueberry Muffin
+
+-- Ingredients for Sourdough Bread
+INSERT INTO Items_consist_of_Ingredients (icoi_article_number, icoi_ingredient_id, icoi_ingredients_count)
+VALUES (5, 7, 1); -- Yeast for Sourdough Bread
+INSERT INTO Items_consist_of_Ingredients (icoi_article_number, icoi_ingredient_id, icoi_ingredients_count)
+VALUES (5, 8, 1); -- Salt for Sourdough Bread
+INSERT INTO Items_consist_of_Ingredients (icoi_article_number, icoi_ingredient_id, icoi_ingredients_count)
+VALUES (5, 10, 2); -- Water for Sourdough Bread
+
+-- Ingredients for Cinnamon Roll
+INSERT INTO Items_consist_of_Ingredients (icoi_article_number, icoi_ingredient_id, icoi_ingredients_count)
+VALUES (6, 4, 2); -- Flour for Cinnamon Roll
+INSERT INTO Items_consist_of_Ingredients (icoi_article_number, icoi_ingredient_id, icoi_ingredients_count)
+VALUES (6, 3, 1); -- Butter for Cinnamon Roll
+INSERT INTO Items_consist_of_Ingredients (icoi_article_number, icoi_ingredient_id, icoi_ingredients_count)
+VALUES (6, 6, 1); -- Sugar for Cinnamon Roll
+
+-- Ingredients for Apple Pie
+INSERT INTO Items_consist_of_Ingredients (icoi_article_number, icoi_ingredient_id, icoi_ingredients_count)
+VALUES (7, 4, 2); -- Flour for Apple Pie (used in crust)
+INSERT INTO Items_consist_of_Ingredients (icoi_article_number, icoi_ingredient_id, icoi_ingredients_count)
+VALUES (7, 6, 2); -- Sugar for Apple Pie
+INSERT INTO Items_consist_of_Ingredients (icoi_article_number, icoi_ingredient_id, icoi_ingredients_count)
+VALUES (7, 3, 1); -- Butter for Apple Pie (used in crust)
+
 
 /***** Items contains Allergens  *****/
 
@@ -932,11 +965,11 @@ VALUES (2, 7, 1); -- Adding 1 Apple Pie to order ID 2
 
 -- Adding items to order ID 3
 INSERT INTO Order_contains_Items (oci_order_id, oci_item_article_number, oci_items_count)
-VALUES (3, 6, 2); -- Adding 2 Cinnamon Rolls to order ID 3
+VALUES (3, 2, 2); -- Adding 2 Cinnamon Rolls to order ID 3
 INSERT INTO Order_contains_Items (oci_order_id, oci_item_article_number, oci_items_count)
-VALUES (3, 9, 1); -- Adding 1 Cheesecake to order ID 3
+VALUES (3, 4, 1); -- Adding 1 Blueberry Muffins to order ID 3
 INSERT INTO Order_contains_Items (oci_order_id, oci_item_article_number, oci_items_count)
-VALUES (3, 10, 3); -- Adding 3 Rye Breads to order ID 3
+VALUES (3, 7, 3); -- Adding 3 Apple Pie to order ID 3
 
 -- Inserting items to an Order 4
 INSERT INTO Order_contains_Items (oci_order_id, oci_item_article_number, oci_items_count)
