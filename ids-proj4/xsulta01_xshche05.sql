@@ -8,6 +8,10 @@ Artur Sultanov (xsulta01).
 
 
 /******************** TABLES DROP ********************/
+
+/*
+Drop all tables in the database. So the script can be run multiple times without any errors.
+*/
 BEGIN
     -- WARNING: Deleting all existing project tables
     FOR existing_table IN (SELECT table_name FROM user_tables ) LOOP
@@ -53,8 +57,7 @@ CREATE TABLE Persons (
 
 /*
 Child table with a primary key to the parent table. Customers table, which contains information about customers.
-It has a primary key person_id, which is derived from the Person table. First (by presentation) method of generalization
-from ERD.
+It has a primary key person_id, which is derived from the Person table.
 */
 CREATE TABLE Customers (
     /* ===== Attributes ===== */
@@ -72,8 +75,7 @@ CREATE TABLE Customers (
 
 /*
 Child table with a primary key to the parent table. Employees table, which contains information about employees.
-It has a primary key person_id, which is derived from the Person table. First (by presentation) method of generalization
-from ERD.
+It has a primary key person_id, which is derived from the Person table.
 */
 CREATE TABLE Employees (
     /* ===== Attributes ===== */
@@ -99,8 +101,7 @@ CREATE TABLE Employees (
 
 /*
 Child table with a primary key to the parent table. Courier table, which contains information about couriers.
-It has a primary key person_id, which is derived from the Employee table. First (by presentation) method of generalization
-from ERD.
+It has a primary key person_id, which is derived from the Employee table.
 */
 CREATE TABLE Courier (
     /* ===== Attributes ===== */
@@ -416,6 +417,7 @@ CREATE TABLE Worker_Shift (
         PRIMARY KEY (person_id, shift_id) -- Composite primary key
 );
 
+
 /******************** TRIGGERS  ********************/
 
 /*
@@ -435,6 +437,7 @@ END;
 
 -- INSERT INTO Orders (order_customer_id, order_status, order_delivery_option, order_date, order_price, order_comment)
 -- VALUES (1, 'NEW', 'COURIER_DELIVERY', TO_DATE('04-04-2025', 'DD-MM-YYYY'), 100, 'Please deliver ASAP.');
+
 
 /*
 Raise error, if was date mistake when delivery ticket date in database.
@@ -460,8 +463,7 @@ END;
 /*
 This trigger is activated after any update on the Delivery_Ticket table.
 It triggers when a delivery ticket's status is updated to 'DELIVERED'.
-The trigger checks if all delivery tickets associated with the same order have the status 'DELIVERED'.
-If true, it then updates the corresponding order's status in the Orders table to 'COMPLETED'.
+It then updates the corresponding order's status in the Orders table to 'COMPLETED'.
 */
 CREATE OR REPLACE TRIGGER trg_update_order_status
 AFTER UPDATE ON Delivery_Ticket
@@ -493,6 +495,7 @@ END;
 --
 -- SELECT * FROM ORDERS;
 -- SELECT * FROM COURIER;
+
 
 /*
 This trigger checks stock levels for ingredients after an item is ordered in the Order_contains_Items table.
@@ -578,6 +581,7 @@ END ValidateStockForOrder;
 -- CALL ValidateStockForOrder(2);
 -- SELECT * FROM Ingredients;
 
+
 /*
 This procedure will calculate the total amount of sales for each customer and print the results.
 */
@@ -607,7 +611,7 @@ END CalculateTotalSales;
 
 /*
 Checks which items have low inventory and sends a restock notification.
-This simply goes through all items and prints out a message if the stock is below or equal to 5.
+This simply goes through all items and prints out a message if the stock is below or equal to 20.
 */
 CREATE OR REPLACE PROCEDURE CheckIngredientInventory IS
     CURSOR inventory_cursor IS
@@ -630,8 +634,9 @@ END;
 -- EXAMPLE:
 -- CALL CheckIngredientInventory();
 
-
-
+/*
+Bind a courier to a car by updating the courier_id in the Car table.
+*/
 CREATE OR REPLACE PROCEDURE BindCourierToCar(
     p_courier_id INT,
     p_registration_number Car.registration_number%TYPE
@@ -710,37 +715,37 @@ INSERT INTO Ingredients (ingredient_id, ingredient_name, ingredient_description,
 VALUES (1, 'Margarine', 'A butter substitute made from vegetable oils or animal fats.', 2.50, 10);
 
 INSERT INTO Ingredients (ingredient_id, ingredient_name, ingredient_description, ingredient_price, ingredient_count)
-VALUES (2, 'Milk', 'A nutrient-rich liquid food produced by the mammary glands of mammals.', 1.20, 100);
+VALUES (2, 'Milk', 'A nutrient-rich liquid food produced by the mammary glands of mammals.', 1.20, 90);
 
 INSERT INTO Ingredients (ingredient_id, ingredient_name, ingredient_description, ingredient_price, ingredient_count)
 VALUES (3, 'Butter', 'A dairy product made from churning cream or milk to separate the solid fats from the liquid.', 3.00, 100);
 
 INSERT INTO Ingredients (ingredient_id, ingredient_name, ingredient_description, ingredient_price, ingredient_count)
-VALUES (4, 'Flour', 'A powder obtained by grinding raw grains, roots, beans, nuts, or seeds.', 0.80, 100);
+VALUES (4, 'Flour', 'A powder obtained by grinding raw grains, roots, beans, nuts, or seeds.', 0.80, 80);
 
 INSERT INTO Ingredients (ingredient_id, ingredient_name, ingredient_description, ingredient_price, ingredient_count)
-VALUES (5, 'Baking powder', 'A dry chemical leavening agent used to increase the volume and lighten the texture of baked goods.', 1.00, 100);
+VALUES (5, 'Baking powder', 'A dry chemical leavening agent used to increase the volume and lighten the texture of baked goods.', 1.00, 70);
 
 INSERT INTO Ingredients (ingredient_id, ingredient_name, ingredient_description, ingredient_price, ingredient_count)
-VALUES (6, 'Sugar', 'A sweet crystalline substance obtained from various plants, mostly sugarcane and sugar beet.', 1.10, 100);
+VALUES (6, 'Sugar', 'A sweet crystalline substance obtained from various plants, mostly sugarcane and sugar beet.', 1.10, 60);
 
 INSERT INTO Ingredients (ingredient_id, ingredient_name, ingredient_description, ingredient_price, ingredient_count)
-VALUES (7, 'Yeast', 'A microorganism used in baking and the fermentation of alcoholic beverages.', 1.30, 100);
+VALUES (7, 'Yeast', 'A microorganism used in baking and the fermentation of alcoholic beverages.', 1.30, 80);
 
 INSERT INTO Ingredients (ingredient_id, ingredient_name, ingredient_description, ingredient_price, ingredient_count)
-VALUES (8, 'Salt', 'A mineral composed primarily of sodium chloride, used as a seasoning and preservative.', 0.50, 100);
+VALUES (8, 'Salt', 'A mineral composed primarily of sodium chloride, used as a seasoning and preservative.', 0.50, 90);
 
 INSERT INTO Ingredients (ingredient_id, ingredient_name, ingredient_description, ingredient_price, ingredient_count)
-VALUES (9, 'Eggs', 'An organic vessel containing the zygote in which an embryo develops.', 2.75, 100);
+VALUES (9, 'Eggs', 'An organic vessel containing the zygote in which an embryo develops.', 2.75, 65);
 
 INSERT INTO Ingredients (ingredient_id, ingredient_name, ingredient_description, ingredient_price, ingredient_count)
 VALUES (10, 'Water', 'A transparent, tasteless, odorless, and nearly colorless chemical substance, which is the main constituent of Earth’s hydrosphere.', 0.00, 100);
 
 INSERT INTO Ingredients (ingredient_id, ingredient_name, ingredient_description, ingredient_price, ingredient_count)
-VALUES (11, 'Vanilla extract', 'A solution containing the flavor compound vanillin as the primary ingredient.', 4.00, 100);
+VALUES (11, 'Vanilla extract', 'A solution containing the flavor compound vanillin as the primary ingredient.', 4.00, 120);
 
 INSERT INTO Ingredients (ingredient_id, ingredient_name, ingredient_description, ingredient_price, ingredient_count)
-VALUES (12, 'Cocoa powder', 'A powder made from roasted and ground cacao seeds, providing a chocolate flavor.', 3.50, 100);
+VALUES (12, 'Cocoa powder', 'A powder made from roasted and ground cacao seeds, providing a chocolate flavor.', 3.50, 60);
 
 /***** ITEMS  *****/
 
@@ -827,7 +832,7 @@ INSERT INTO Persons (name, surname) VALUES ('Sheev', 'Palpatine');              
 INSERT INTO Persons (name, surname) VALUES ('Luke', 'Skywalker');                   -- ID=2 Employee (not a courier)
 INSERT INTO Persons (name, surname) VALUES ('Han', 'Solo');                         -- ID=3 Employee (courier)
 INSERT INTO Persons (person_id, name, surname) VALUES (4, 'Darth', 'Vader');        -- ID=4 Client
-INSERT INTO Persons (person_id, name, surname) VALUES (5, 'Lando"', 'Calrissian');  -- ID=5 Employee (courier)
+INSERT INTO Persons (person_id, name, surname) VALUES (5, 'Lando', 'Calrissian');   -- ID=5 Employee (courier)
 
 
 /***** Customers  *****/
@@ -857,16 +862,15 @@ VALUES (5, 45000, 'Courier', 'US00XYZW000000000000005678');
 
 -- Inserting courier data
 INSERT INTO Courier (person_id, completed_orders_amount, contact_phone_number)
-VALUES (3, 0, '+420123456789');
+VALUES (3, 0, '+420123456789'); -- Assigning Han Solo as a courier
 INSERT INTO Courier (person_id, completed_orders_amount, contact_phone_number)
-VALUES (5, 0, '+420987654321');
+VALUES (5, 0, '+420987654321'); -- Assigning Lando Calrissian as a courier
 
 /***** Car  *****/
 
 -- Inserting car data
 INSERT INTO Car (registration_number, cost_of_maintenance, courier_id)
 VALUES ('1ABC234', 500, 3);
-
 INSERT INTO Car (registration_number, cost_of_maintenance, courier_id)
 VALUES ('6XYZ789', 300, null);
 
@@ -883,6 +887,9 @@ INSERT INTO Worker_Shift (person_id, shift_id)
 VALUES (2, 1); -- Assigning Luke Skywalker to the morning shift
 INSERT INTO Worker_Shift (person_id, shift_id)
 VALUES (3, 2); -- Assigning Han Solo to the afternoon shift
+INSERT INTO Worker_Shift (person_id, shift_id)
+VALUES (5, 2); -- Assigning Lando Calrissian to the afternoon shift
+
 
 /***** Orders  *****/
 
@@ -939,17 +946,17 @@ VALUES (3, 2, 3, TO_DATE('2024-07-16', 'YYYY-MM-DD'),
 /
 
 /******************** TABLES GRANT ********************/
+
 BEGIN
-    -- WARNING: Deleting all existing project tables
     -- if current user is XSULTA01
     IF USER = 'XSULTA01' THEN
         FOR existing_table IN (SELECT table_name FROM user_tables ) LOOP
-            EXECUTE IMMEDIATE 'GRANT ALL ON ' || existing_table.TABLE_NAME || ' TO XSHCHE05';
+            EXECUTE IMMEDIATE 'GRANT ALL ON ' || existing_table.TABLE_NAME || ' TO XSHCHE05'; -- Grant all tables to XSHCHE05
         END LOOP;
-        EXECUTE IMMEDIATE 'GRANT EXECUTE ON ValidateStockForOrder TO XSHCHE05';
-        EXECUTE IMMEDIATE 'GRANT EXECUTE ON CalculateTotalSales TO XSHCHE05';
-        EXECUTE IMMEDIATE 'GRANT EXECUTE ON CheckIngredientInventory TO XSHCHE05';
-        EXECUTE IMMEDIATE 'GRANT EXECUTE ON BindCourierToCar TO XSHCHE05';
+        EXECUTE IMMEDIATE 'GRANT EXECUTE ON ValidateStockForOrder TO XSHCHE05'; -- Grant ValidateStockForOrder procedure
+        EXECUTE IMMEDIATE 'GRANT EXECUTE ON CalculateTotalSales TO XSHCHE05'; -- Grant CalculateTotalSales procedure
+        EXECUTE IMMEDIATE 'GRANT EXECUTE ON CheckIngredientInventory TO XSHCHE05'; -- Grant CheckIngredientInventory procedure
+        EXECUTE IMMEDIATE 'GRANT EXECUTE ON BindCourierToCar TO XSHCHE05'; -- Grant BindCourierToCar procedure
     END IF;
 END;
 /
@@ -966,6 +973,8 @@ EXCEPTION
 END;
 /
 
+/***** Materialized view  *****/
+
 -- Materialized view showing unique addressed of undelivered orders
 CREATE MATERIALIZED VIEW ADDR_UNDEV_ORD
 REFRESH ON DEMAND AS
@@ -974,7 +983,6 @@ REFRESH ON DEMAND AS
     JOIN XSULTA01.DELIVERY_TICKET DT on A.ADDRESS_ID = DT.ADDRESS_ID
     WHERE DT.TICKET_STATUS = 'OPEN';
 SELECT * FROM ADDR_UNDEV_ORD;
-
 
 /***** Queries Utilizing JOINs  *****/
 
@@ -1044,7 +1052,6 @@ WHERE I.item_article_number IN (
 
 /***** Query Using SELECT WITH CASE *****/
 
-
 -- Find completed orders and show the delivery type, along with the customer name and order price.
 WITH OrderDetails AS (
     SELECT
@@ -1069,7 +1076,6 @@ SELECT
     order_price
 FROM OrderDetails
 ORDER BY order_price DESC;
-
 
 
 -- Show the information about the courier and the car is being used.
