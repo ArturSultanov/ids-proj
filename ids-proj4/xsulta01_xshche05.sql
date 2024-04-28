@@ -573,6 +573,11 @@ BEGIN
             END IF;
         END LOOP;
     END LOOP;
+    EXCEPTION
+        WHEN NO_DATA_FOUND THEN
+            DBMS_OUTPUT.PUT_LINE('No data found for order ID: ' || p_order_id);
+        WHEN OTHERS THEN
+            DBMS_OUTPUT.PUT_LINE('Error validating stock for order: ' || SQLERRM);
 END ValidateStockForOrder;
 /
 
@@ -602,6 +607,9 @@ BEGIN
             DBMS_OUTPUT.PUT_LINE('Total sales for customer ' || customer_name || ': ' || total_sales);
         END;
     END LOOP;
+    EXCEPTION
+        WHEN OTHERS THEN
+            DBMS_OUTPUT.PUT_LINE('Error calculating total sales: ' || SQLERRM);
 END CalculateTotalSales;
 /
 
@@ -1199,14 +1207,14 @@ SELECT * FROM TABLE(DBMS_XPLAN.DISPLAY());
 
 /***** Triggers and Procedure showcases *****/
 
--- TRIGGERS SHOWCASES (Please, uncomment needed showcases for demonstration):
+-- TRIGGERS SHOWCASES:
 
--- 1. order_date_before_insert_or_update
+-- 1. order_date_before_insert_or_update (generate exception)
 -- INSERT INTO Orders (order_customer_id, order_status, order_delivery_option, order_date, order_price, order_comment)
 -- VALUES (1, 'NEW', 'COURIER_DELIVERY', TO_DATE('04-04-2025', 'DD-MM-YYYY'), 100, 'Please deliver ASAP.');
 
 
--- 2. delivery_ticket_date_before_insert_or_update
+-- 2. delivery_ticket_date_before_insert_or_update (generate exception)
 -- INSERT INTO Delivery_Ticket (courier_id, address_id, order_id, delivery_date, time_from, time_to)
 -- VALUES (3, 1, 1, TO_DATE('2020-07-16', 'YYYY-MM-DD'),
 --         TO_TIMESTAMP('2020-07-16:09:00:00', 'YYYY-MM-DD:HH24:MI:SS'),
@@ -1214,41 +1222,41 @@ SELECT * FROM TABLE(DBMS_XPLAN.DISPLAY());
 
 
 -- 3. trg_update_order_status
--- CALL ValidateStockForOrder(3);
--- SELECT * FROM ORDERS;
--- SELECT * FROM COURIER;
---
--- UPDATE DELIVERY_TICKET DT SET DT.ticket_status = 'DELIVERED' WHERE DT.order_id =
---     (SELECT O.order_id FROM Orders O WHERE O.order_status = 'IN_PROGRESS'
---                                        AND O.order_delivery_option = 'COURIER_DELIVERY'
---     FETCH FIRST 1 ROW ONLY);
---
--- SELECT * FROM ORDERS;
--- SELECT * FROM COURIER;
+CALL ValidateStockForOrder(3);
+SELECT * FROM ORDERS;
+SELECT * FROM COURIER;
+
+UPDATE DELIVERY_TICKET DT SET DT.ticket_status = 'DELIVERED' WHERE DT.order_id =
+    (SELECT O.order_id FROM Orders O WHERE O.order_status = 'IN_PROGRESS'
+                                       AND O.order_delivery_option = 'COURIER_DELIVERY'
+    FETCH FIRST 1 ROW ONLY);
+
+SELECT * FROM ORDERS;
+SELECT * FROM COURIER;
 
 
 -- 4. trg_update_inventory
--- INSERT INTO Order_contains_Items (oci_order_id, oci_item_article_number, oci_items_count)
--- VALUES (4, 2, 1000); -- Adding 1000 Croissants to order ID 2
+INSERT INTO Order_contains_Items (oci_order_id, oci_item_article_number, oci_items_count)
+VALUES (4, 2, 1000); -- Adding 1000 Croissants to order ID 2
 
 
--- PROCEDURES SHOWCASES (Please, uncomment needed showcases for demonstration):
+-- PROCEDURES SHOWCASES:
 
 -- 1. ValidateStockForOrder(p_order_id ORDERS.order_id%TYPE)
--- SELECT * FROM Ingredients;
--- CALL ValidateStockForOrder(4);
--- SELECT * FROM Ingredients;
+SELECT * FROM Ingredients;
+CALL ValidateStockForOrder(4);
+SELECT * FROM Ingredients;
 
 
 -- 2. CalculateTotalSales
--- CALL CalculateTotalSales();
+CALL CalculateTotalSales();
 
 
 -- 3. CheckIngredientInventory
--- CALL CheckIngredientInventory();
+CALL CheckIngredientInventory();
 
 
 -- 4. BindCourierToCar(p_courier_id INT, p_registration_number Car.registration_number%TYPE)
--- SELECT * FROM Car;
--- CALL BindCourierToCar(6, '0AAA007');
--- SELECT * FROM Car;
+SELECT * FROM Car;
+CALL BindCourierToCar(6, '0AAA007');
+SELECT * FROM Car;
