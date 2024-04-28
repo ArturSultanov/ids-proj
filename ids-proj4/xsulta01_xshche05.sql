@@ -833,6 +833,7 @@ INSERT INTO Persons (name, surname) VALUES ('Luke', 'Skywalker');               
 INSERT INTO Persons (name, surname) VALUES ('Han', 'Solo');                         -- ID=3 Employee (courier)
 INSERT INTO Persons (person_id, name, surname) VALUES (4, 'Darth', 'Vader');        -- ID=4 Client
 INSERT INTO Persons (person_id, name, surname) VALUES (5, 'Lando', 'Calrissian');   -- ID=5 Employee (courier)
+INSERT INTO Persons (person_id, name, surname) VALUES (6, 'Boba', 'Fett');          -- ID=6 Employee (courier)
 
 
 /***** Customers  *****/
@@ -857,6 +858,8 @@ INSERT INTO Employees (person_id, salary, position, bank_account_number)
 VALUES (3, 40000, 'Courier', 'US00ABCD123456789012345678');
 INSERT INTO Employees (person_id, salary, position, bank_account_number)
 VALUES (5, 45000, 'Courier', 'US00XYZW000000000000005678');
+INSERT INTO Employees (person_id, salary, position, bank_account_number)
+VALUES (6, 43000, 'Courier', 'US001ABCW00000000000005678');
 
 /***** Courier  *****/
 
@@ -865,6 +868,8 @@ INSERT INTO Courier (person_id, completed_orders_amount, contact_phone_number)
 VALUES (3, 0, '+420123456789'); -- Assigning Han Solo as a courier
 INSERT INTO Courier (person_id, completed_orders_amount, contact_phone_number)
 VALUES (5, 0, '+420987654321'); -- Assigning Lando Calrissian as a courier
+INSERT INTO Courier (person_id, completed_orders_amount, contact_phone_number)
+VALUES (6, 0, '+421732654321'); -- Assigning Boba Fett as a courier
 
 /***** Car  *****/
 
@@ -873,6 +878,8 @@ INSERT INTO Car (registration_number, cost_of_maintenance, courier_id)
 VALUES ('1ABC234', 500, 3);
 INSERT INTO Car (registration_number, cost_of_maintenance, courier_id)
 VALUES ('6XYZ789', 300, null);
+INSERT INTO Car (registration_number, cost_of_maintenance, courier_id)
+VALUES ('0AAA007', 200, null);
 
 /***** Working_Shift  *****/
 
@@ -885,6 +892,8 @@ VALUES (TO_TIMESTAMP('2024-07-25 16:00:00', 'YYYY-MM-DD HH24:MI:SS'), 8); -- Aft
 
 INSERT INTO Worker_Shift (person_id, shift_id)
 VALUES (2, 1); -- Assigning Luke Skywalker to the morning shift
+INSERT INTO Worker_Shift (person_id, shift_id)
+VALUES (6, 1); -- Assigning Boba Fett to the morning shift
 INSERT INTO Worker_Shift (person_id, shift_id)
 VALUES (3, 2); -- Assigning Han Solo to the afternoon shift
 INSERT INTO Worker_Shift (person_id, shift_id)
@@ -900,6 +909,8 @@ INSERT INTO Orders (order_customer_id, order_status, order_delivery_option, orde
 VALUES (4, 'NEW', 'SELF_PICKUP', TO_DATE(SYSDATE, 'DD-MM-YYYY'), 500, '');
 INSERT INTO Orders (order_customer_id, order_status, order_delivery_option, order_date, order_price, order_comment)
 VALUES (4, 'NEW', 'COURIER_DELIVERY', TO_DATE(SYSDATE, 'DD-MM-YYYY'), 200, 'Pack in a gift box');
+INSERT INTO Orders (order_customer_id, order_status, order_delivery_option, order_date, order_price, order_comment)
+VALUES (1, 'NEW', 'COURIER_DELIVERY', TO_DATE(SYSDATE, 'DD-MM-YYYY'), 200, 'Please, use recycle packaging');
 
 /***** Order_contains_Items  *****/
 
@@ -927,6 +938,9 @@ VALUES (3, 9, 1); -- Adding 1 Cheesecake to order ID 3
 INSERT INTO Order_contains_Items (oci_order_id, oci_item_article_number, oci_items_count)
 VALUES (3, 10, 3); -- Adding 3 Rye Breads to order ID 3
 
+-- Inserting items to an Order 4
+INSERT INTO Order_contains_Items (oci_order_id, oci_item_article_number, oci_items_count)
+VALUES (4, 1, 2); -- Adding 2 French Baguettes to order ID 4
 
 /***** Delivery_Ticket  *****/
 
@@ -940,7 +954,11 @@ VALUES (3, 2, 2, TO_DATE('2024-07-08', 'YYYY-MM-DD'),
         TO_TIMESTAMP('2024-07-08:09:00:00', 'YYYY-MM-DD:HH24:MI:SS'),
         TO_TIMESTAMP('2024-07-08:12:00:00', 'YYYY-MM-DD:HH24:MI:SS'));
 INSERT INTO Delivery_Ticket (courier_id, address_id, order_id, delivery_date, time_from, time_to)
-VALUES (3, 2, 3, TO_DATE('2024-07-16', 'YYYY-MM-DD'),
+VALUES (5, 2, 3, TO_DATE('2024-07-16', 'YYYY-MM-DD'),
+        TO_TIMESTAMP('2024-12-31:09:00:00', 'YYYY-MM-DD:HH24:MI:SS'),
+        TO_TIMESTAMP('2024-12-31:12:00:00', 'YYYY-MM-DD:HH24:MI:SS'));
+INSERT INTO Delivery_Ticket (courier_id, address_id, order_id, delivery_date, time_from, time_to)
+VALUES (6, 1, 4, TO_DATE('2024-07-16', 'YYYY-MM-DD'),
         TO_TIMESTAMP('2024-12-31:09:00:00', 'YYYY-MM-DD:HH24:MI:SS'),
         TO_TIMESTAMP('2024-12-31:12:00:00', 'YYYY-MM-DD:HH24:MI:SS'));
 /
@@ -1163,7 +1181,7 @@ SELECT * FROM TABLE(DBMS_XPLAN.DISPLAY());
 
 
 -- 3. trg_update_order_status
--- CALL ValidateStockForOrder(1);
+-- CALL ValidateStockForOrder(3);
 -- SELECT * FROM ORDERS;
 -- SELECT * FROM COURIER;
 --
@@ -1178,14 +1196,14 @@ SELECT * FROM TABLE(DBMS_XPLAN.DISPLAY());
 
 -- 4. trg_update_inventory
 -- INSERT INTO Order_contains_Items (oci_order_id, oci_item_article_number, oci_items_count)
--- VALUES (1, 2, 1000); -- Adding 1000 Croissants to order ID 1
+-- VALUES (4, 2, 1000); -- Adding 1000 Croissants to order ID 2
 
 
 -- PROCEDURES SHOWCASES (Please, uncomment needed showcases for demonstration):
 
 -- 1. ValidateStockForOrder(p_order_id ORDERS.order_id%TYPE)
 -- SELECT * FROM Ingredients;
--- CALL ValidateStockForOrder(2);
+-- CALL ValidateStockForOrder(4);
 -- SELECT * FROM Ingredients;
 
 
@@ -1199,5 +1217,5 @@ SELECT * FROM TABLE(DBMS_XPLAN.DISPLAY());
 
 -- 4. BindCourierToCar(p_courier_id INT, p_registration_number Car.registration_number%TYPE)
 -- SELECT * FROM Car;
--- CALL BindCourierToCar(5, '6XYZ789');
+-- CALL BindCourierToCar(6, '0AAA007');
 -- SELECT * FROM Car;
